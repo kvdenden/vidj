@@ -7,4 +7,22 @@ const opts = {
   key: process.env.REACT_APP_YOUTUBE_API_KEY
 };
 
-export default query => youtubeSearch(query, opts);
+const parseResult = result => {
+  const { id, title, description, thumbnails } = result;
+  return {
+    videoId: id,
+    title,
+    description,
+    thumbnail: thumbnails.default.url
+  };
+};
+
+export default async query => {
+  try {
+    const response = await youtubeSearch(query, opts);
+    const results = response.results.map(parseResult);
+    return { results };
+  } catch (error) {
+    return { error };
+  }
+};

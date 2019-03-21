@@ -1,17 +1,26 @@
-import _ from "lodash";
+import {
+  START_FETCH_VIDEOS,
+  FETCH_VIDEOS_SUCCESS,
+  FETCH_VIDEOS_ERROR
+} from "./types";
 
-import { FETCH_VIDEOS } from "./types";
-
-import youtube from "../api/youtube";
+// import youtube from "../api/youtube";
+import invidious from "../api/invidious";
 
 export const searchVideos = query => async dispatch => {
-  const response = query ? await youtube(query) : { results: [] };
-  console.log(response);
-  const results = response.results.map(result =>
-    _.pick(result, ["id", "title", "description", "thumbnails"])
-  );
   dispatch({
-    type: FETCH_VIDEOS,
-    payload: results
+    type: START_FETCH_VIDEOS
   });
+  const response = query ? await invidious(query) : { results: [] };
+  if (response.error) {
+    dispatch({
+      type: FETCH_VIDEOS_ERROR,
+      payload: response.error
+    });
+  } else {
+    dispatch({
+      type: FETCH_VIDEOS_SUCCESS,
+      payload: response.results
+    });
+  }
 };

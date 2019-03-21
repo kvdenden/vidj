@@ -5,16 +5,7 @@ import _ from "lodash";
 
 import { searchVideos } from "../actions";
 
-const SearchResult = ({ id, title, description, thumbnails }) => (
-  <Search.Result
-    id={id}
-    title={title}
-    description={description}
-    image={thumbnails.medium.url}
-  />
-);
-
-const VideoSearch = ({ searchVideos, results, onVideoSelect }) => {
+const VideoSearch = ({ searchVideos, search, onVideoSelect }) => {
   const handleSearchChange = (_event, { value }) => {
     searchVideos(value);
   };
@@ -24,13 +15,24 @@ const VideoSearch = ({ searchVideos, results, onVideoSelect }) => {
     onVideoSelect(result);
   };
 
+  const { loading } = search;
+  const results = search.results.map(result => {
+    const { videoId, title, description, thumbnail } = result;
+    return {
+      childKey: videoId,
+      title,
+      description,
+      image: thumbnail
+    };
+  });
+
   return (
     <Search
-      selectFirstResult
+      loading={loading}
       results={results}
+      selectFirstResult
       onSearchChange={_.debounce(handleSearchChange, 500)}
       onResultSelect={handleResultSelect}
-      resultRenderer={SearchResult}
       input={{ fluid: true }}
       fluid
     />
@@ -38,12 +40,12 @@ const VideoSearch = ({ searchVideos, results, onVideoSelect }) => {
 };
 
 VideoSearch.defaultProps = {
-  results: [],
+  search: { loading: false, results: [] },
   onVideoSelect: () => {}
 };
 
-const mapStateToProps = ({ searchResults }) => {
-  return { results: searchResults };
+const mapStateToProps = ({ search }) => {
+  return { search };
 };
 
 export default connect(
