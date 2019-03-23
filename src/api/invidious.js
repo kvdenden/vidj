@@ -11,13 +11,24 @@ const parseResult = result => {
   };
 };
 
-export default async query => {
+const api = axios.create({ baseURL: "https://invidio.us/api/v1" });
+
+export const search = async query => {
   try {
-    const response = await axios.get("https://invidio.us/api/v1/search", {
+    const response = await api.get("/search", {
       params: { q: query }
     });
     const results = response.data.map(parseResult);
     return { results };
+  } catch (error) {
+    return { error };
+  }
+};
+
+export const get = async videoId => {
+  try {
+    const response = await api.get(`/videos/${videoId}`);
+    console.log(response.data);
   } catch (error) {
     return { error };
   }

@@ -11,14 +11,21 @@ const VideoSearch = ({ searchVideos, search, onVideoSelect }) => {
   };
 
   const handleResultSelect = (_event, { result }) => {
-    console.log(result);
-    onVideoSelect(result);
+    const { id, title, description, image } = result;
+    const video = {
+      title,
+      description,
+      thumbnail: image,
+      videoId: id
+    };
+    onVideoSelect(video);
   };
 
   const { loading } = search;
   const results = search.results.map(result => {
     const { videoId, title, description, thumbnail } = result;
     return {
+      id: videoId,
       childKey: videoId,
       title,
       description,
