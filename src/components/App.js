@@ -6,13 +6,17 @@ import VideoPlayer from "./VideoPlayer";
 import VideoSearch from "./VideoSearch";
 import Playlist from "./Playlist";
 import { addVideoToPlaylist } from "../actions";
+import { Divider, Segment } from "semantic-ui-react";
 
 const App = ({ currentVideo, nextVideos, addVideoToPlaylist }) => {
   return (
     <div className="ui container">
       <VideoPlayer {...currentVideo} />
-      <Playlist videos={nextVideos} />
+      <Divider />
       <VideoSearch onVideoSelect={addVideoToPlaylist} />
+      <Segment>
+        <Playlist videos={nextVideos} />
+      </Segment>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Search } from "semantic-ui-react";
 import _ from "lodash";
@@ -6,8 +6,13 @@ import _ from "lodash";
 import { searchVideos } from "../actions";
 
 const VideoSearch = ({ searchVideos, search, onVideoSelect }) => {
+  const [query, setQuery] = useState("");
+
   const handleSearchChange = (_event, { value }) => {
-    searchVideos(value);
+    setQuery(value);
+    if (value) {
+      searchVideos(value);
+    }
   };
 
   const handleResultSelect = (_event, { result }) => {
@@ -19,6 +24,7 @@ const VideoSearch = ({ searchVideos, search, onVideoSelect }) => {
       videoId: id
     };
     onVideoSelect(video);
+    setQuery("");
   };
 
   const { loading } = search;
@@ -35,10 +41,11 @@ const VideoSearch = ({ searchVideos, search, onVideoSelect }) => {
 
   return (
     <Search
+      value={query}
       loading={loading}
       results={results}
       selectFirstResult
-      onSearchChange={_.debounce(handleSearchChange, 500)}
+      onSearchChange={handleSearchChange}
       onResultSelect={handleResultSelect}
       input={{ fluid: true }}
       fluid
@@ -55,7 +62,14 @@ const mapStateToProps = ({ search }) => {
   return { search };
 };
 
+const mapDispatchToProps = dispatch => {
+  const debouncedSearch = _.debounce(q => dispatch(searchVideos(q)), 1000);
+  return {
+    searchVideos: debouncedSearch
+  };
+};
+
 export default connect(
   mapStateToProps,
-  { searchVideos }
+  mapDispatchToProps
 )(VideoSearch);
