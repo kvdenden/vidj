@@ -56,3 +56,10 @@ export const addVideoToPlaylist = video => {
     payload: video
   };
 };
+
+export const changeVideoPosition = (from, to) => {
+  return {
+    type: CHANGE_VIDEO_POSITION,
+    payload: { from, to }
+  };
+};

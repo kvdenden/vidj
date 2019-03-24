@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
 import searchReducer from "./searchReducer";
-import videoReducer from "./videoReducer";
+import playlistReducer from "./playlistReducer";
 
 export default combineReducers({
   search: searchReducer,
-  videos: videoReducer
+  playlist: playlistReducer
 });
