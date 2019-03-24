@@ -28,7 +28,7 @@ export const search = async query => {
 export const get = async videoId => {
   try {
     const response = await api.get(`/videos/${videoId}`);
-    console.log(response.data);
+    return parseResult(response.data);
   } catch (error) {
     return { error };
   }
