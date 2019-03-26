@@ -12,8 +12,6 @@ import {
 } from "../actions";
 import { Divider, Segment } from "semantic-ui-react";
 
-const channelId = "27I9jKM2x";
-
 const App = ({
   videos,
   fetchPlaylist,
@@ -21,13 +19,13 @@ const App = ({
   changeVideoPosition
 }) => {
   useEffect(() => {
-    fetchPlaylist(channelId);
+    fetchPlaylist();
   }, []);
 
   const [currentVideo, ...nextVideos] = videos;
   return (
     <div className="ui container">
-      <VideoPlayer {...currentVideo} />
+      <VideoPlayer video={currentVideo} />
       <Divider />
       <VideoSearch onVideoSelect={addVideoToPlaylist} />
       <Segment>

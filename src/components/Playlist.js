@@ -18,7 +18,11 @@ const PlaylistItem = SortableElement(({ title, thumbnail }) => {
 const PlaylistItems = SortableContainer(({ videos }) => (
   <List divided size="large" verticalAlign="middle">
     {videos.map((video, index) => (
-      <PlaylistItem index={index} key={video.videoId} {...video} />
+      <PlaylistItem
+        index={index}
+        key={`${video.videoId}-${index}`}
+        {...video}
+      />
     ))}
   </List>
 ));
@@ -36,10 +40,10 @@ const Playlist = ({ title, videos, onChangePosition }) => {
       <PlaylistItems
         videos={videos}
         helperContainer={() => helperRef.current}
-        onSortEnd={({ oldIndex, newIndex }) => {
-          console.log(`move song ${oldIndex} to ${newIndex}`);
-          onChangePosition(oldIndex, newIndex);
-        }}
+        onSortEnd={({ oldIndex, newIndex }) =>
+          onChangePosition(oldIndex, newIndex)
+        }
+        useWindowAsScrollContainer
       />
       <div ref={helperRef} className="ui large celled middle aligned list" />
     </div>

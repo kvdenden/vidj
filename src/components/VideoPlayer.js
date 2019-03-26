@@ -3,8 +3,9 @@ import { connect } from "react-redux";
 import ReactPlayer from "react-player";
 import { playNextVideo } from "../actions";
 
-const VideoPlayer = ({ videoId, onStart, onEnded }) => {
+const VideoPlayer = ({ video, onStart, onEnded }) => {
   let player;
+  const { videoId } = video;
 
   if (videoId) {
     player = (
@@ -22,6 +23,7 @@ const VideoPlayer = ({ videoId, onStart, onEnded }) => {
 };
 
 VideoPlayer.defaultProps = {
+  video: {},
   onStart: () => {},
   onEnded: () => {}
 };

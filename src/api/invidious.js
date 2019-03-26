@@ -1,4 +1,5 @@
 import axios from "axios";
+import { memoize } from "lodash";
 
 const parseResult = result => {
   const { videoId, title, description, videoThumbnails } = result;
@@ -32,4 +33,9 @@ export const get = async videoId => {
   } catch (error) {
     return { error };
   }
+};
+
+export const memoized = {
+  search: memoize(search),
+  get: memoize(get)
 };
