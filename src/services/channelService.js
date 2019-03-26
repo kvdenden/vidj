@@ -6,7 +6,7 @@ module.exports = {
     return await Channel.find();
   },
 
-  show: async channelId => {
+  get: async channelId => {
     return await Channel.findById(channelId);
   },
 

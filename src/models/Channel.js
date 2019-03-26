@@ -7,7 +7,11 @@ const ChannelSchema = new mongoose.Schema({
     default: shortid.generate
   },
   title: String,
-  playlist: [String]
+  playlist: [String],
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user"
+  }
 });
 
 const Channel = mongoose.model("channel", ChannelSchema);
