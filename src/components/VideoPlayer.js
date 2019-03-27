@@ -1,9 +1,7 @@
 import React from "react";
-import { connect } from "react-redux";
 import ReactPlayer from "react-player";
-import { playNextVideo } from "../actions";
 
-const VideoPlayer = ({ video, onStart, onEnded }) => {
+const VideoPlayer = ({ video, onStart, onEnded, onError }) => {
   let player;
   const { videoId } = video;
 
@@ -15,6 +13,7 @@ const VideoPlayer = ({ video, onStart, onEnded }) => {
         controls
         onStart={onStart}
         onEnded={onEnded}
+        onError={onError}
       />
     );
   }
@@ -25,10 +24,8 @@ const VideoPlayer = ({ video, onStart, onEnded }) => {
 VideoPlayer.defaultProps = {
   video: {},
   onStart: () => {},
-  onEnded: () => {}
+  onEnded: () => {},
+  onError: () => {}
 };
 
-export default connect(
-  null,
-  { onEnded: playNextVideo }
-)(VideoPlayer);
+export default VideoPlayer;

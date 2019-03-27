@@ -11,11 +11,10 @@ import * as vidj from "../api/vidj";
 
 const callAndUpdatePlaylist = async (
   dispatch,
-  getState,
   apiCall,
+  channelId,
   ...extraArgs
 ) => {
-  const { channelId } = getState().channel;
   const { playlist } = await apiCall(channelId, ...extraArgs);
   const videos = await Promise.all(
     playlist.map(videoId => invidious.get(videoId))
@@ -26,36 +25,36 @@ const callAndUpdatePlaylist = async (
   });
 };
 
-export const fetchPlaylist = () => async (dispatch, getState) => {
+export const fetchPlaylist = channelId => async dispatch => {
   dispatch({
     type: START_FETCH_PLAYLIST
   });
 
-  callAndUpdatePlaylist(dispatch, getState, vidj.get);
+  callAndUpdatePlaylist(dispatch, vidj.get, channelId);
 };
 
-export const playNextVideo = () => async (dispatch, getState) => {
+export const playNextVideo = () => async dispatch => {
   dispatch({
     type: PLAY_NEXT_VIDEO
   });
 
-  callAndUpdatePlaylist(dispatch, getState, vidj.nextVideo);
+  callAndUpdatePlaylist(dispatch, vidj.nextVideo);
 };
 
-export const addVideoToPlaylist = video => async (dispatch, getState) => {
+export const addVideoToPlaylist = (channelId, video) => async dispatch => {
   dispatch({
     type: ADD_VIDEO_TO_PLAYLIST,
     payload: video
   });
 
-  callAndUpdatePlaylist(dispatch, getState, vidj.addVideo, video.videoId);
+  callAndUpdatePlaylist(dispatch, vidj.addVideo, channelId, video.videoId);
 };
 
-export const changeVideoPosition = (from, to) => async (dispatch, getState) => {
+export const changeVideoPosition = (channelId, from, to) => async dispatch => {
   dispatch({
     type: CHANGE_VIDEO_POSITION,
     payload: { from, to }
   });
 
-  callAndUpdatePlaylist(dispatch, getState, vidj.moveVideo, from, to);
+  callAndUpdatePlaylist(dispatch, vidj.moveVideo, channelId, from, to);
 };

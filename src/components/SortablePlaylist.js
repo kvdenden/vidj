@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { List, Header } from "semantic-ui-react";
+import { List } from "semantic-ui-react";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
 
 import Playlist, { PlaylistItem } from "./Playlist";

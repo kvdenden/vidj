@@ -1,6 +1,5 @@
 import {
   SET_CHANNEL_MASTER,
-  SET_CHANNEL_ID,
   START_SEARCH_VIDEOS,
   SEARCH_VIDEOS_SUCCESS,
   SEARCH_VIDEOS_ERROR,
@@ -18,13 +17,6 @@ export const fetchAuthToken = () => async dispatch => {
     type: AUTH_SUCCESS,
     payload: token
   });
-};
-
-export const setChannelId = channelId => {
-  return {
-    type: SET_CHANNEL_ID,
-    payload: channelId
-  };
 };
 
 export const setChannelMaster = (master = true) => {
