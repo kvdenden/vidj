@@ -1,10 +1,9 @@
-import React, { useRef } from "react";
+import React from "react";
 import { List, Image, Header } from "semantic-ui-react";
-import { SortableContainer, SortableElement } from "react-sortable-hoc";
 
 import "./Playlist.css";
 
-const PlaylistItem = SortableElement(({ title, thumbnail }) => {
+export const PlaylistItem = ({ title, thumbnail }) => {
   return (
     <List.Item>
       <Image avatar src={thumbnail} />
@@ -13,9 +12,9 @@ const PlaylistItem = SortableElement(({ title, thumbnail }) => {
       </List.Content>
     </List.Item>
   );
-});
+};
 
-const PlaylistItems = SortableContainer(({ videos }) => (
+const PlaylistItems = ({ videos }) => (
   <List divided size="large" verticalAlign="middle">
     {videos.map((video, index) => (
       <PlaylistItem
@@ -25,35 +24,22 @@ const PlaylistItems = SortableContainer(({ videos }) => (
       />
     ))}
   </List>
-));
+);
 
-const Playlist = ({ title, videos, onChangePosition }) => {
-  const helperRef = useRef();
-
+const Playlist = ({ videos }) => {
   if (videos.length < 1) {
     return null;
   }
 
   return (
     <div className="playlist">
-      <Header as="h2">{title}</Header>
-      <PlaylistItems
-        videos={videos}
-        helperContainer={() => helperRef.current}
-        onSortEnd={({ oldIndex, newIndex }) =>
-          onChangePosition(oldIndex, newIndex)
-        }
-        useWindowAsScrollContainer
-      />
-      <div ref={helperRef} className="ui large celled middle aligned list" />
+      <PlaylistItems videos={videos} />
     </div>
   );
 };
 
 Playlist.defaultProps = {
-  title: "Up next",
-  videos: [],
-  onChangePosition: () => {}
+  videos: []
 };
 
 export default Playlist;
