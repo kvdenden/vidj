@@ -45,3 +45,4 @@ export const searchVideos = query => async dispatch => {
 };
 
 export * from "./playlistActions";
+export * from "./socketActions";

@@ -5,7 +5,7 @@ const VideoItem = ({ video }) => {
   const { title, thumbnail } = video;
 
   return (
-    <Item.Group>
+    <Item.Group unstackable>
       <Item>
         <Item.Image size="small" src={thumbnail} />
         <Item.Content verticalAlign="middle">

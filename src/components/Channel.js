@@ -9,6 +9,8 @@ import VideoSearch from "./VideoSearch";
 import Playlist from "./Playlist";
 import SortablePlaylist from "./SortablePlaylist";
 import {
+  subscribeToChannel,
+  unsubscribeFromChannel,
   fetchPlaylist,
   playNextVideo,
   addVideoToPlaylist,
@@ -36,7 +38,16 @@ const CurrentVideo = props => {
       />
     );
   } else {
-    return <VideoItem video={currentVideo} />;
+    return (
+      <Card fluid>
+        <Card.Content>
+          <Card.Header>Currently playing</Card.Header>
+        </Card.Content>
+        <Card.Content>
+          <VideoItem video={currentVideo} />
+        </Card.Content>
+      </Card>
+    );
   }
 };
 
@@ -73,10 +84,22 @@ const NextVideos = props => {
 };
 
 const Channel = props => {
-  const { channelId, fetchPlaylist, addVideoToPlaylist } = props;
+  const {
+    channelId,
+    subscribeToChannel,
+    unsubscribeFromChannel,
+    fetchPlaylist,
+    addVideoToPlaylist
+  } = props;
 
   useEffect(() => {
     fetchPlaylist();
+  }, [channelId]);
+
+  useEffect(() => {
+    subscribeToChannel();
+
+    return unsubscribeFromChannel;
   }, [channelId]);
 
   return (
@@ -95,7 +118,14 @@ const mapStateToProps = ({ channel, playlist }) => {
 
 const mapDispatchToProps = (dispatch, { channelId }) => {
   const channelActions = _.mapValues(
-    { fetchPlaylist, playNextVideo, addVideoToPlaylist, changeVideoPosition },
+    {
+      subscribeToChannel,
+      unsubscribeFromChannel,
+      fetchPlaylist,
+      playNextVideo,
+      addVideoToPlaylist,
+      changeVideoPosition
+    },
     action => _.partial(action, channelId)
   );
   return bindActionCreators(channelActions, dispatch);

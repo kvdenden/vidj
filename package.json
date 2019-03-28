@@ -16,6 +16,7 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "semantic-ui-react": "^0.86.0",
+    "socket.io-client": "^2.2.0",
     "youtube-search": "^1.1.4"
   },
   "scripts": {

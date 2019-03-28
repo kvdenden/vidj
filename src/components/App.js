@@ -19,7 +19,7 @@ const App = ({ fetchAuthToken }) => {
           <Route
             path="/"
             exact
-            render={() => <Redirect to="/channels/A0RFpuoNR" />}
+            render={() => <Redirect to="/channels/OUD0pdXvH" />}
           />
           <Route path="/channels/:channelId" component={ShowChannelPage} />
         </Switch>

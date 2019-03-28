@@ -16,8 +16,12 @@ const callAndUpdatePlaylist = async (
   ...extraArgs
 ) => {
   const { playlist } = await apiCall(channelId, ...extraArgs);
+  updatePlaylist(playlist)(dispatch);
+};
+
+export const updatePlaylist = videoIds => async dispatch => {
   const videos = await Promise.all(
-    playlist.map(videoId => invidious.get(videoId))
+    videoIds.map(videoId => invidious.get(videoId))
   );
   dispatch({
     type: FETCH_PLAYLIST_SUCCESS,
@@ -33,12 +37,12 @@ export const fetchPlaylist = channelId => async dispatch => {
   callAndUpdatePlaylist(dispatch, vidj.get, channelId);
 };
 
-export const playNextVideo = () => async dispatch => {
+export const playNextVideo = channelId => async dispatch => {
   dispatch({
     type: PLAY_NEXT_VIDEO
   });
 
-  callAndUpdatePlaylist(dispatch, vidj.nextVideo);
+  callAndUpdatePlaylist(dispatch, vidj.nextVideo, channelId);
 };
 
 export const addVideoToPlaylist = (channelId, video) => async dispatch => {
