@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const User = require("../models/User");
 const Channel = require("../models/Channel");
 const channelsController = require("../controllers/channelsController");
 

@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const socketio = require("socket.io");
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
@@ -32,6 +31,5 @@ app.use("/auth", authRoutes);
 app.use("/channels", channelRoutes);
 
 const server = app.listen(8080);
-const io = socketio(server);
 
-module.exports = { server, io };
+module.exports = server;
