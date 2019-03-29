@@ -15,6 +15,20 @@ export const auth = async () => {
   return response.data;
 };
 
+export const create = async () => {
+  const response = await api.post("/channels");
+  return response.data;
+};
+
+export const check = async channelId => {
+  try {
+    const response = await api.get(`/channels?id=${channelId}`);
+    return response.data.length > 0;
+  } catch (e) {
+    return false;
+  }
+};
+
 export const get = async channelId => {
   const response = await api.get(`/channels/${channelId}`);
   return response.data;
