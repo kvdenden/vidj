@@ -2,8 +2,8 @@ const Channel = require("../models/Channel");
 const moveArray = require("../utils").moveArray;
 
 module.exports = {
-  index: async () => {
-    return await Channel.find();
+  find: async filter => {
+    return await Channel.find(filter);
   },
 
   get: async channelId => {

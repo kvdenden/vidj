@@ -1,13 +1,15 @@
 const channelService = require("../services/channelService");
 
 const channelData = channel => {
-  const { id, title, playlist } = channel;
-  return { id, title, playlist };
+  const { id, playlist } = channel;
+  return { id, playlist };
 };
 
 module.exports = {
   index: async (req, res) => {
-    const channels = await channelService.index();
+    const { id } = req.query;
+    const filter = id ? { _id: id } : {};
+    const channels = await channelService.find(filter);
     const data = channels.map(channelData);
     res.send(data);
   },
@@ -24,9 +26,8 @@ module.exports = {
   },
 
   create: async (req, res) => {
-    const { title } = req.body;
     try {
-      const channel = await channelService.create({ title, owner: req.user });
+      const channel = await channelService.create({ owner: req.user });
       const data = channelData(channel);
       res.send(data);
     } catch (err) {
