@@ -1,6 +1,6 @@
 import { SET_CHANNEL_MASTER } from "../actions/types";
 
-const INITIAL_STATE = { master: true };
+const INITIAL_STATE = { master: false };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {

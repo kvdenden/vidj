@@ -32,6 +32,13 @@ const dispatchSetChannelMaster = master => {
   store.dispatch(setChannelMaster(master));
 };
 
+socket.on("playlistChange", (_channelId, playlist) =>
+  dispatchPlaylistChange(playlist)
+);
+socket.on("setMaster", (_channelId, master) =>
+  dispatchSetChannelMaster(master)
+);
+
 export const joinChannel = channelId => {
   socket.emit("joinChannel", channelId);
 };

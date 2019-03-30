@@ -3,15 +3,18 @@ import {
   START_SEARCH_VIDEOS,
   SEARCH_VIDEOS_SUCCESS,
   SEARCH_VIDEOS_ERROR,
-  AUTH_SUCCESS
+  AUTH_SUCCESS,
+  START_AUTH
 } from "./types";
 
 import { memoized as invidious } from "../api/invidious";
 import { auth } from "../api/vidj";
 
 export const fetchAuthToken = () => async dispatch => {
+  dispatch({
+    type: START_AUTH
+  });
   const token = await auth();
-
   localStorage.setItem("token", token);
   dispatch({
     type: AUTH_SUCCESS,

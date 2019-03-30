@@ -7,11 +7,20 @@ import history from "../history";
 import { fetchAuthToken } from "../actions";
 import ShowChannelPage from "./pages/ShowChannelPage";
 import SelectChannelPage from "./pages/SelectChannelPage";
+import { Dimmer, Loader } from "semantic-ui-react";
 
-const App = ({ fetchAuthToken }) => {
+const App = ({ authToken, fetchAuthToken }) => {
   useEffect(() => {
     fetchAuthToken();
   }, []);
+
+  if (!authToken) {
+    return (
+      <Dimmer active>
+        <Loader content="Loading" />
+      </Dimmer>
+    );
+  }
 
   return (
     <div className="ui container">
@@ -25,7 +34,13 @@ const App = ({ fetchAuthToken }) => {
   );
 };
 
+const mapStateToProps = ({ auth }) => {
+  return {
+    authToken: auth.token
+  };
+};
+
 export default connect(
-  null,
+  mapStateToProps,
   { fetchAuthToken }
 )(App);
