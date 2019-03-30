@@ -18,10 +18,10 @@ const VideoSearch = ({ searchVideos, search, onVideoSelect }) => {
   const handleResultSelect = (_event, { result }) => {
     const { id, title, description, image } = result;
     const video = {
+      videoId: id,
       title,
       description,
-      thumbnail: image,
-      videoId: id
+      thumbnail: image
     };
     onVideoSelect(video);
     setQuery("");
