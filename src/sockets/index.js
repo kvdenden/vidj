@@ -1,5 +1,7 @@
 const socketio = require("socket.io");
 const server = require("../server");
+const User = require("../models/User");
+const Channel = require("../models/Channel");
 const channelService = require("../services/channelService");
 
 const io = socketio(server);
@@ -22,9 +24,19 @@ const broadcastPlaylistChange = channel => {
 
 io.on("connection", socket => {
   console.log(`${socket.id} connected`);
-  socket.on("joinChannel", channelId => {
+  let user;
+  socket.on("auth", async token => {
+    user = await User.findOne({ token });
+    console.log(`${socket.id} auth as user ${user}`);
+  });
+
+  socket.on("joinChannel", async channelId => {
     console.log(`${socket.id} joined channel ${channelId}`);
     socket.join(channelId);
+    const channel = await Channel.findById(channelId);
+    if (user.id == channel.owner) {
+      socket.emit("setMaster", true);
+    }
   });
 
   socket.on("leaveChannel", channelId => {
