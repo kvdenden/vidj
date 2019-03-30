@@ -8,7 +8,7 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case START_AUTH:
-      return { loading: true, token: null };
+      return { ...state, loading: true };
     case AUTH_SUCCESS:
       return { loading: false, token: action.payload };
     default:

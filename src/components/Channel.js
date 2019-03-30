@@ -86,10 +86,11 @@ const NextVideos = props => {
 const Channel = props => {
   const {
     channelId,
-    subscribeToChannel,
-    unsubscribeFromChannel,
     fetchPlaylist,
-    addVideoToPlaylist
+    addVideoToPlaylist,
+    socketReady,
+    subscribeToChannel,
+    unsubscribeFromChannel
   } = props;
 
   useEffect(() => {
@@ -97,10 +98,12 @@ const Channel = props => {
   }, [channelId]);
 
   useEffect(() => {
-    subscribeToChannel();
+    if (socketReady) {
+      subscribeToChannel();
 
-    return unsubscribeFromChannel;
-  }, [channelId]);
+      return unsubscribeFromChannel;
+    }
+  }, [channelId, socketReady]);
 
   return (
     <div style={{ marginTop: "2em" }}>
@@ -112,8 +115,12 @@ const Channel = props => {
   );
 };
 
-const mapStateToProps = ({ channel, playlist }) => {
-  return { master: channel.master, videos: playlist.videos };
+const mapStateToProps = ({ channel, playlist, socket }) => {
+  return {
+    master: channel.master,
+    videos: playlist.videos,
+    socketReady: socket.authenticated
+  };
 };
 
 const mapDispatchToProps = (dispatch, { channelId }) => {

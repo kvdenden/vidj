@@ -4,15 +4,24 @@ import { connect } from "react-redux";
 import "./App.css";
 
 import history from "../history";
-import { fetchAuthToken } from "../actions";
+import { fetchAuthToken, socketAuth } from "../actions";
 import ShowChannelPage from "./pages/ShowChannelPage";
 import SelectChannelPage from "./pages/SelectChannelPage";
 import { Dimmer, Loader } from "semantic-ui-react";
 
-const App = ({ authToken, fetchAuthToken }) => {
+const App = ({ authToken, fetchAuthToken, socket, socketAuth }) => {
   useEffect(() => {
-    fetchAuthToken();
+    if (!authToken) {
+      fetchAuthToken();
+    }
   }, []);
+
+  useEffect(() => {
+    console.log("socket effect", socket, authToken);
+    if (socket.connected && authToken) {
+      socketAuth(authToken);
+    }
+  }, [socket.connected, authToken]);
 
   if (!authToken) {
     return (
@@ -34,13 +43,14 @@ const App = ({ authToken, fetchAuthToken }) => {
   );
 };
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, socket }) => {
   return {
-    authToken: auth.token
+    authToken: auth.token,
+    socket
   };
 };
 
 export default connect(
   mapStateToProps,
-  { fetchAuthToken }
+  { fetchAuthToken, socketAuth }
 )(App);
