@@ -19,7 +19,8 @@ module.exports = {
     const channel = await channelService.get(channelId);
     if (channel) {
       const data = channelData(channel);
-      res.send(data);
+      const isOwner = req.user && req.user.id == channel.owner;
+      res.send({ ...data, owner: isOwner });
     } else {
       res.status(404).send();
     }
@@ -35,10 +36,10 @@ module.exports = {
     }
   },
 
-  addSong: async (req, res) => {
+  addVideo: async (req, res) => {
     const { channelId } = req.params;
     const { videoId } = req.body;
-    const channel = await channelService.addSong(channelId, videoId);
+    const channel = await channelService.addVideo(channelId, videoId);
     if (channel) {
       const data = channelData(channel);
       res.send(data);
@@ -47,9 +48,9 @@ module.exports = {
     }
   },
 
-  nextSong: async (req, res) => {
+  nextVideo: async (req, res) => {
     const { channelId } = req.params;
-    const channel = await channelService.nextSong(channelId);
+    const channel = await channelService.nextVideo(channelId);
     if (channel) {
       const data = channelData(channel);
       res.send(data);
@@ -58,13 +59,26 @@ module.exports = {
     }
   },
 
-  moveSong: async (req, res) => {
+  moveVideo: async (req, res) => {
     const { channelId } = req.params;
     const { from, to } = req.body;
 
-    const channel = await channelService.moveSong(channelId, from, to);
+    const channel = await channelService.moveVideo(channelId, from, to);
     if (channel) {
       res.send(channel);
+    } else {
+      res.status(404).send();
+    }
+  },
+
+  removeVideo: async (req, res) => {
+    const { channelId } = req.params;
+    const { index } = req.body;
+
+    const channel = await channelService.removeVideo(channelId, index);
+    if (channel) {
+      const data = channelData(channel);
+      res.send(data);
     } else {
       res.status(404).send();
     }

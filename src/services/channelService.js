@@ -1,5 +1,5 @@
 const Channel = require("../models/Channel");
-const moveArray = require("../utils").moveArray;
+const { moveArray, removeAt } = require("../utils");
 
 module.exports = {
   find: async filter => {
@@ -14,7 +14,7 @@ module.exports = {
     return await new Channel(props).save();
   },
 
-  addSong: async (channelId, videoId) => {
+  addVideo: async (channelId, videoId) => {
     return await Channel.findByIdAndUpdate(
       channelId,
       {
@@ -24,7 +24,7 @@ module.exports = {
     );
   },
 
-  nextSong: async channelId => {
+  nextVideo: async channelId => {
     return await Channel.findByIdAndUpdate(
       channelId,
       {
@@ -34,10 +34,19 @@ module.exports = {
     );
   },
 
-  moveSong: async (channelId, from, to) => {
+  moveVideo: async (channelId, from, to) => {
     const channel = await Channel.findById(channelId);
     if (channel) {
       channel.playlist = moveArray(channel.playlist, from, to);
+      channel.save();
+    }
+    return channel;
+  },
+
+  removeVideo: async (channelId, index) => {
+    const channel = await Channel.findById(channelId);
+    if (channel) {
+      channel.playlist = removeAt(channel.playlist, index);
       channel.save();
     }
     return channel;

@@ -11,7 +11,7 @@ const broadcastPlaylistChange = channel => {
   io.to(channelId).emit("playlistChange", channelId, channel.playlist);
 };
 
-["addSong", "nextSong", "moveSong"].forEach(method => {
+["addVideo", "nextVideo", "moveVideo", "removeVideo"].forEach(method => {
   const originalMethod = channelService[method];
   const wrappedMethod = async (...args) => {
     const result = await originalMethod(...args);

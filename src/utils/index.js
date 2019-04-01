@@ -4,6 +4,13 @@ const moveArray = (array, from, to) => {
   return array;
 };
 
+const removeAt = (array, index) => {
+  array = [...array]; // copy array
+  array.splice(index, 1);
+  return array;
+};
+
 module.exports = {
-  moveArray
+  moveArray,
+  removeAt
 };

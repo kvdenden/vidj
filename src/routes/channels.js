@@ -18,8 +18,13 @@ router.get("/", channelsController.index);
 router.get("/:channelId", channelsController.show);
 
 router.post("/", onlyAuthorized, channelsController.create);
-router.post("/:channelId/add", channelsController.addSong);
-router.post("/:channelId/next", onlyChannelOwner, channelsController.nextSong);
-router.post("/:channelId/move", onlyChannelOwner, channelsController.moveSong);
+router.post("/:channelId/add", channelsController.addVideo);
+router.post("/:channelId/next", onlyChannelOwner, channelsController.nextVideo);
+router.post("/:channelId/move", onlyChannelOwner, channelsController.moveVideo);
+router.post(
+  "/:channelId/remove",
+  onlyChannelOwner,
+  channelsController.removeVideo
+);
 
 module.exports = router;
