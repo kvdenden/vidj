@@ -1,45 +1,74 @@
 import React from "react";
-import { List, Image } from "semantic-ui-react";
+import { List, Image, Button } from "semantic-ui-react";
 
 import "./Playlist.css";
 
-export const PlaylistItem = ({ title, thumbnail }) => {
+const PlaylistAction = ({ title, action, ...buttonProps }) => {
   return (
-    <List.Item>
+    <Button onClick={action} {...buttonProps}>
+      {title}
+    </Button>
+  );
+};
+
+const PlaylistActions = ({ video, videoIndex, actions }) => {
+  const buttons = actions.map((action, index) => {
+    const actionProps = {
+      ...action,
+      action: () => action.action(video, videoIndex)
+    };
+    return <PlaylistAction key={index} {...actionProps} />;
+  });
+  return <Button.Group>{buttons}</Button.Group>;
+};
+
+export const PlaylistItem = ({ index, video, itemActions }) => {
+  const { title, thumbnail } = video;
+  return (
+    <List.Item style={{ display: "flex", alignItems: "center" }}>
       <Image avatar src={thumbnail} />
-      <List.Content style={{ maxWidth: "calc(100% - 2em)" }}>
+      <List.Content style={{ flexGrow: 1 }}>
         <List.Header>{title}</List.Header>
+      </List.Content>
+      <List.Content>
+        <PlaylistActions
+          video={video}
+          videoIndex={index}
+          actions={itemActions}
+        />
       </List.Content>
     </List.Item>
   );
 };
 
-const PlaylistItems = ({ videos }) => (
+const PlaylistItems = ({ videos, itemActions }) => (
   <List divided size="large" verticalAlign="middle">
     {videos.map((video, index) => (
       <PlaylistItem
         index={index}
         key={`${video.videoId}-${index}`}
-        {...video}
+        video={video}
+        itemActions={itemActions}
       />
     ))}
   </List>
 );
 
-const Playlist = ({ videos }) => {
+const Playlist = ({ videos, itemActions }) => {
   if (videos.length < 1) {
     return null;
   }
 
   return (
     <div className="playlist">
-      <PlaylistItems videos={videos} />
+      <PlaylistItems videos={videos} itemActions={itemActions} />
     </div>
   );
 };
 
 Playlist.defaultProps = {
-  videos: []
+  videos: [],
+  itemActions: []
 };
 
 export default Playlist;

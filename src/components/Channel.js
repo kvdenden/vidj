@@ -11,23 +11,22 @@ import SortablePlaylist from "./SortablePlaylist";
 import {
   subscribeToChannel,
   unsubscribeFromChannel,
-  fetchPlaylist,
+  fetchChannel,
   playNextVideo,
   addVideoToPlaylist,
-  changeVideoPosition
+  changeVideoPosition,
+  removeVideoFromPlaylist
 } from "../actions";
 import VideoItem from "./VideoItem";
 
 const CurrentVideo = props => {
   const {
-    videos: [currentVideo],
-    master,
+    channel: {
+      master,
+      playlist: [currentVideo]
+    },
     playNextVideo
   } = props;
-
-  if (!currentVideo) {
-    return null;
-  }
 
   if (master) {
     return (
@@ -37,7 +36,7 @@ const CurrentVideo = props => {
         onError={playNextVideo}
       />
     );
-  } else {
+  } else if (currentVideo) {
     return (
       <Card fluid>
         <Card.Content>
@@ -48,26 +47,41 @@ const CurrentVideo = props => {
         </Card.Content>
       </Card>
     );
+  } else {
+    return null;
   }
 };
 
 const NextVideos = props => {
   const {
-    videos: [, ...nextVideos],
-    master,
-    changeVideoPosition
+    channel: {
+      owner,
+      playlist: [, ...nextVideos]
+    },
+    changeVideoPosition,
+    removeVideoFromPlaylist
   } = props;
 
   if (nextVideos.length < 1) {
     return null;
   }
 
-  const playlist = master ? (
+  const adminActions = [
+    {
+      title: "Remove",
+      color: "red",
+      basic: true,
+      action: (_video, index) => removeVideoFromPlaylist(index + 1)
+    }
+  ];
+
+  const playlist = owner ? (
     <SortablePlaylist
       videos={nextVideos}
       onChangePosition={(oldIndex, newIndex) =>
         changeVideoPosition(oldIndex + 1, newIndex + 1)
       }
+      itemActions={adminActions}
     />
   ) : (
     <Playlist videos={nextVideos} />
@@ -86,7 +100,7 @@ const NextVideos = props => {
 const Channel = props => {
   const {
     channelId,
-    fetchPlaylist,
+    fetchChannel,
     addVideoToPlaylist,
     socketReady,
     subscribeToChannel,
@@ -94,7 +108,7 @@ const Channel = props => {
   } = props;
 
   useEffect(() => {
-    fetchPlaylist();
+    fetchChannel();
   }, [channelId]);
 
   useEffect(() => {
@@ -115,10 +129,9 @@ const Channel = props => {
   );
 };
 
-const mapStateToProps = ({ channel, playlist, socket }) => {
+const mapStateToProps = ({ channel, socket }) => {
   return {
-    master: channel.master,
-    videos: playlist.videos,
+    channel,
     socketReady: socket.authenticated
   };
 };
@@ -128,10 +141,11 @@ const mapDispatchToProps = (dispatch, { channelId }) => {
     {
       subscribeToChannel,
       unsubscribeFromChannel,
-      fetchPlaylist,
+      fetchChannel,
       playNextVideo,
       addVideoToPlaylist,
-      changeVideoPosition
+      changeVideoPosition,
+      removeVideoFromPlaylist
     },
     action => _.partial(action, channelId)
   );

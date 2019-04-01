@@ -46,3 +46,8 @@ export const moveVideo = async (channelId, from, to) => {
   const response = await api.post(`/channels/${channelId}/move`, { from, to });
   return response.data;
 };
+
+export const removeVideo = async (channelId, index) => {
+  const response = await api.post(`/channels/${channelId}/remove`, { index });
+  return response.data;
+};

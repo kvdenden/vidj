@@ -1,5 +1,4 @@
 import {
-  SET_CHANNEL_MASTER,
   START_SEARCH_VIDEOS,
   SEARCH_VIDEOS_SUCCESS,
   SEARCH_VIDEOS_ERROR,
@@ -22,13 +21,6 @@ export const fetchAuthToken = () => async dispatch => {
   });
 };
 
-export const setChannelMaster = (master = true) => {
-  return {
-    type: SET_CHANNEL_MASTER,
-    payload: master
-  };
-};
-
 export const searchVideos = query => async dispatch => {
   dispatch({
     type: START_SEARCH_VIDEOS
@@ -47,5 +39,5 @@ export const searchVideos = query => async dispatch => {
   }
 };
 
-export * from "./playlistActions";
+export * from "./channelActions";
 export * from "./socketActions";
