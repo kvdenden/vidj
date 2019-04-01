@@ -1,0 +1,15 @@
+.playlist .ui.list {
+  background-color: #eee;
+}
+
+.playlist .ui.list > .item {
+  background-color: white;
+}
+
+.playlist .ui.list > .item:first-child {
+  padding-top: 0.21428571em;
+}
+
+.playlist .ui.list > .item:last-child {
+  padding-bottom: 0.21428571em;
+}
