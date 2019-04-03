@@ -43,11 +43,12 @@ export const fetchChannel = channelId => async dispatch => {
   });
 
   const channel = await vidj.get(channelId);
-  const playlist = await fetchVideos(channel.playlist);
   dispatch({
     type: FETCH_CHANNEL_SUCCESS,
-    payload: { ...channel, playlist }
+    payload: channel
   });
+
+  dispatch(updatePlaylist(channel.playlist));
 };
 
 export const playNextVideo = channelId => async dispatch => {

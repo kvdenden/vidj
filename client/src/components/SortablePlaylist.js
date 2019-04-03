@@ -31,24 +31,22 @@ const SortablePlaylist = ({ videos, itemActions, onChangePosition }) => {
   }
 
   return (
-    <>
-      <div className="playlist">
-        <SortablePlaylistItems
-          videos={videos}
-          itemActions={itemActions}
-          helperContainer={() => helperRef.current}
-          onSortEnd={({ oldIndex, newIndex }) =>
-            onChangePosition(oldIndex, newIndex)
-          }
-          useWindowAsScrollContainer
-        />
-      </div>
+    <div className="playlist">
+      <SortablePlaylistItems
+        videos={videos}
+        itemActions={itemActions}
+        helperContainer={() => helperRef.current}
+        onSortEnd={({ oldIndex, newIndex }) =>
+          onChangePosition(oldIndex, newIndex)
+        }
+        useWindowAsScrollContainer
+      />
       <div
         ref={helperRef}
         className="ui large celled middle aligned list"
         style={{ margin: 0 }}
       />
-    </>
+    </div>
   );
 };
 

@@ -33,8 +33,8 @@ export default (state = INITIAL_STATE, action) => {
     case START_FETCH_CHANNEL:
       return { ...INITIAL_STATE, loading: true };
     case FETCH_CHANNEL_SUCCESS:
-      const { playlist, owner } = action.payload;
-      return { ...state, loading: false, owner, playlist };
+      const { owner } = action.payload;
+      return { ...state, loading: false, owner };
     case SET_CHANNEL_MASTER:
       return { ...state, master: action.payload };
     case FETCH_PLAYLIST_SUCCESS:

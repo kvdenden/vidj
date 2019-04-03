@@ -5,7 +5,8 @@ import {
   SUBSCRIBE_TO_CHANNEL,
   UNSUBSCRIBE_FROM_CHANNEL
 } from "./types";
-import { joinChannel, leaveChannel, auth } from "../api/socket";
+
+import { auth, joinChannel, leaveChannel } from "../api/socket";
 
 export const socketConnect = () => {
   return {
@@ -21,7 +22,6 @@ export const socketDisconnect = () => {
 
 export const socketAuth = token => async dispatch => {
   const authenticated = await auth(token);
-  console.log(`socketAuth ${authenticated}`);
   dispatch({
     type: SOCKET_AUTH,
     payload: authenticated

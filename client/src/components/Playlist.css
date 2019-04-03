@@ -1,5 +1,6 @@
 .playlist .ui.list {
   background-color: #eee;
+  margin: 0;
 }
 
 .playlist .ui.list > .item {

@@ -40,4 +40,5 @@ export const searchVideos = query => async dispatch => {
 };
 
 export * from "./channelActions";
+export * from "./videoActions";
 export * from "./socketActions";

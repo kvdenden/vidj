@@ -2,12 +2,19 @@ import axios from "axios";
 import { memoize } from "lodash";
 
 const parseResult = result => {
-  const { videoId, title, description, videoThumbnails } = result;
+  const {
+    videoId,
+    title,
+    description,
+    videoThumbnails,
+    lengthSeconds
+  } = result;
   const thumbnail = videoThumbnails.find(thumb => thumb.quality === "default");
   return {
     videoId,
     title,
     description,
+    duration: lengthSeconds,
     thumbnail: thumbnail.url
   };
 };

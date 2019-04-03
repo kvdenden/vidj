@@ -4,7 +4,8 @@ import {
   socketConnect,
   socketDisconnect,
   updatePlaylist,
-  setChannelMaster
+  setChannelMaster,
+  setVideoStatus
 } from "../actions";
 
 const socket = io("http://localhost:8080");
@@ -17,18 +18,22 @@ socket.on("disconnect", () => {
   store.dispatch(socketDisconnect());
 });
 
-socket.on("playlistChange", (_channelId, playlist) =>
-  store.dispatch(updatePlaylist(playlist))
-);
+socket.on("playlistChange", (_channelId, playlist) => {
+  store.dispatch(updatePlaylist(playlist));
+});
 
-socket.on("setMaster", (_channelId, master) =>
-  store.dispatch(setChannelMaster(master))
-);
+socket.on("setMaster", (_channelId, master) => {
+  store.dispatch(setChannelMaster(master));
+});
+
+socket.on("videoStatus", (_channelId, videoStatus) => {
+  console.log(videoStatus);
+  store.dispatch(setVideoStatus(videoStatus));
+});
 
 export default socket;
 
 export const auth = token => {
-  console.log(`socket auth ${token}`);
   return new Promise(resolve =>
     socket.emit("auth", token, authenticated => {
       console.log(`socket auth response ${authenticated}`);
@@ -38,16 +43,14 @@ export const auth = token => {
 };
 
 export const joinChannel = channelId => {
-  console.log(`join channel ${channelId}`);
   socket.emit("joinChannel", channelId);
 };
 
 export const leaveChannel = channelId => {
-  console.log(`leave channel ${channelId}`);
   socket.emit("leaveChannel", channelId);
 };
 
-export const requestMaster = channelId => {
-  console.log(`request master for ${channelId}`);
-  socket.emit("requestMaster", channelId);
+export const broadcastVideoStatus = (channelId, videoStatus) => {
+  console.log("broadcasting video status", videoStatus);
+  socket.emit("videoStatus", channelId, videoStatus);
 };

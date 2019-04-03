@@ -1,13 +1,9 @@
 import React, { useEffect } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { Divider, Card } from "semantic-ui-react";
+import { Divider } from "semantic-ui-react";
 import _ from "lodash";
 
-import VideoPlayer from "./VideoPlayer";
-import VideoSearch from "./VideoSearch";
-import Playlist from "./Playlist";
-import SortablePlaylist from "./SortablePlaylist";
 import {
   subscribeToChannel,
   unsubscribeFromChannel,
@@ -17,85 +13,10 @@ import {
   changeVideoPosition,
   removeVideoFromPlaylist
 } from "../actions";
-import VideoItem from "./VideoItem";
 
-const CurrentVideo = props => {
-  const {
-    channel: {
-      master,
-      playlist: [currentVideo]
-    },
-    playNextVideo
-  } = props;
-
-  if (master) {
-    return (
-      <VideoPlayer
-        video={currentVideo}
-        onEnded={playNextVideo}
-        onError={playNextVideo}
-      />
-    );
-  } else if (currentVideo) {
-    return (
-      <Card fluid>
-        <Card.Content>
-          <Card.Header>Currently playing</Card.Header>
-        </Card.Content>
-        <Card.Content>
-          <VideoItem video={currentVideo} />
-        </Card.Content>
-      </Card>
-    );
-  } else {
-    return null;
-  }
-};
-
-const NextVideos = props => {
-  const {
-    channel: {
-      owner,
-      playlist: [, ...nextVideos]
-    },
-    changeVideoPosition,
-    removeVideoFromPlaylist
-  } = props;
-
-  if (nextVideos.length < 1) {
-    return null;
-  }
-
-  const adminActions = [
-    {
-      title: "Remove",
-      color: "red",
-      basic: true,
-      action: (_video, index) => removeVideoFromPlaylist(index + 1)
-    }
-  ];
-
-  const playlist = owner ? (
-    <SortablePlaylist
-      videos={nextVideos}
-      onChangePosition={(oldIndex, newIndex) =>
-        changeVideoPosition(oldIndex + 1, newIndex + 1)
-      }
-      itemActions={adminActions}
-    />
-  ) : (
-    <Playlist videos={nextVideos} />
-  );
-
-  return (
-    <Card fluid>
-      <Card.Content>
-        <Card.Header>Up next</Card.Header>
-      </Card.Content>
-      <Card.Content>{playlist}</Card.Content>
-    </Card>
-  );
-};
+import CurrentVideo from "./CurrentVideo";
+import NextVideos from "./NextVideos";
+import VideoSearch from "./VideoSearch";
 
 const Channel = props => {
   const {
