@@ -13,7 +13,7 @@ const VideoItem = ({ video, videoStatus }) => {
           <Item.Content verticalAlign="middle" header={title}>
             <Item.Header>{title}</Item.Header>
             <Item.Meta>{playing ? "Playing" : "Paused"}</Item.Meta>
-            <Item.Extra>
+            <Item.Extra style={{ marginTop: "1rem" }}>
               <a
                 href={`https://www.youtube.com/watch?v=${videoId}`}
                 target="_blank"

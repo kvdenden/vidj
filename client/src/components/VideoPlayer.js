@@ -1,7 +1,7 @@
 import React from "react";
 import ReactPlayer from "react-player";
 
-const VideoPlayer = ({ video, ...props }) => {
+const VideoPlayer = ({ video, playing, ...props }) => {
   let player;
   const { videoId } = video;
 
@@ -10,7 +10,7 @@ const VideoPlayer = ({ video, ...props }) => {
     player = (
       <ReactPlayer
         url={`//www.youtube.com/watch?v=${videoId}`}
-        playing
+        playing={playing}
         controls
         onStart={onStart}
         onPlay={onPlay}
