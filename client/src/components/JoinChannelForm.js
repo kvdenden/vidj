@@ -1,18 +1,24 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import { Form, Header } from "semantic-ui-react";
 import history from "../history";
 import { check } from "../api/vidj";
+import { setNotificationMessage } from "../actions";
 
-const JoinChannelForm = () => {
+const JoinChannelForm = ({ setNotificationMessage }) => {
   const [channelId, setChannelId] = useState("");
 
-  const handleChange = (e, { value }) => setChannelId(value);
+  const handleChange = (_e, { value }) => setChannelId(value.trim());
   const handleSubmit = async () => {
     const channelExists = await check(channelId);
     if (channelExists) {
       history.push(`/channels/${channelId}`);
     } else {
-      console.log(`channel ${channelId} does not exist!`);
+      setNotificationMessage(
+        `Channel ${channelId} does not exist!`,
+        "Invalid Channel ID",
+        "warning"
+      );
     }
   };
 
@@ -20,6 +26,7 @@ const JoinChannelForm = () => {
     <Form onSubmit={handleSubmit}>
       <Header>Enter Channel ID</Header>
       <Form.Input
+        required
         inline
         placeholder="Channel ID"
         name="channelId"
@@ -31,4 +38,7 @@ const JoinChannelForm = () => {
   );
 };
 
-export default JoinChannelForm;
+export default connect(
+  null,
+  { setNotificationMessage }
+)(JoinChannelForm);

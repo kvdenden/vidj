@@ -4,11 +4,13 @@ import searchReducer from "./searchReducer";
 import authReducer from "./authReducer";
 import socketReducer from "./socketReducer";
 import videoStatusReducer from "./videoStatusReducer";
+import notificationReducer from "./notificationReducer";
 
 export default combineReducers({
   channel: channelReducer,
   search: searchReducer,
   auth: authReducer,
   socket: socketReducer,
-  videoStatus: videoStatusReducer
+  videoStatus: videoStatusReducer,
+  notification: notificationReducer
 });

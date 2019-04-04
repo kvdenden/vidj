@@ -27,7 +27,6 @@ socket.on("setMaster", (_channelId, master) => {
 });
 
 socket.on("videoStatus", (_channelId, videoStatus) => {
-  console.log(videoStatus);
   store.dispatch(setVideoStatus(videoStatus));
 });
 
@@ -36,7 +35,6 @@ export default socket;
 export const auth = token => {
   return new Promise(resolve =>
     socket.emit("auth", token, authenticated => {
-      console.log(`socket auth response ${authenticated}`);
       resolve(authenticated);
     })
   );
@@ -51,6 +49,5 @@ export const leaveChannel = channelId => {
 };
 
 export const broadcastVideoStatus = (channelId, videoStatus) => {
-  console.log("broadcasting video status", videoStatus);
   socket.emit("videoStatus", channelId, videoStatus);
 };

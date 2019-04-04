@@ -1,8 +1,4 @@
-import {
-  START_SEARCH_VIDEOS,
-  SEARCH_VIDEOS_SUCCESS,
-  SEARCH_VIDEOS_ERROR
-} from "../actions/types";
+import { START_SEARCH_VIDEOS, SEARCH_VIDEOS_SUCCESS } from "../actions/types";
 
 const INITIAL_STATE = {
   loading: false,
@@ -15,8 +11,6 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: true };
     case SEARCH_VIDEOS_SUCCESS:
       return { ...state, results: action.payload, loading: false };
-    case SEARCH_VIDEOS_ERROR:
-      return { ...state, results: [], loading: false, error: action.payload };
     default:
       return state;
   }

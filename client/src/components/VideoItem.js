@@ -10,7 +10,7 @@ const VideoItem = ({ video, videoStatus }) => {
       <Item.Group unstackable style={{ marginBottom: 0 }}>
         <Item>
           <Item.Image size="small" src={thumbnail} />
-          <Item.Content verticalAlign="middle" header={title}>
+          <Item.Content verticalAlign="middle">
             <Item.Header>{title}</Item.Header>
             <Item.Meta>{playing ? "Playing" : "Paused"}</Item.Meta>
             <Item.Extra style={{ marginTop: "1rem" }}>

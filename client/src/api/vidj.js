@@ -19,12 +19,8 @@ export const create = async () => {
 };
 
 export const check = async channelId => {
-  try {
-    const response = await api.get(`/channels?id=${channelId}`);
-    return response.data.length > 0;
-  } catch (e) {
-    return false;
-  }
+  const response = await api.get(`/channels?id=${channelId}`);
+  return response.data.length > 0;
 };
 
 export const get = async channelId => {

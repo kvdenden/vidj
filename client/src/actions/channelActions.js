@@ -12,6 +12,8 @@ import {
 import { memoized as invidious } from "../api/invidious";
 import * as vidj from "../api/vidj";
 
+import { setNotificationMessage } from "./";
+
 const fetchVideos = async videoIds => {
   const videos = await Promise.all(
     videoIds.map(videoId => invidious.get(videoId))
@@ -20,11 +22,15 @@ const fetchVideos = async videoIds => {
 };
 
 export const updatePlaylist = videoIds => async dispatch => {
-  const videos = await fetchVideos(videoIds);
-  dispatch({
-    type: FETCH_PLAYLIST_SUCCESS,
-    payload: videos
-  });
+  try {
+    const videos = await fetchVideos(videoIds);
+    dispatch({
+      type: FETCH_PLAYLIST_SUCCESS,
+      payload: videos
+    });
+  } catch (error) {
+    dispatch(setNotificationMessage(error.message));
+  }
 };
 
 const callAndUpdatePlaylist = async (
@@ -33,8 +39,12 @@ const callAndUpdatePlaylist = async (
   channelId,
   ...extraArgs
 ) => {
-  const { playlist } = await apiCall(channelId, ...extraArgs);
-  dispatch(updatePlaylist(playlist));
+  try {
+    const { playlist } = await apiCall(channelId, ...extraArgs);
+    dispatch(updatePlaylist(playlist));
+  } catch (error) {
+    dispatch(setNotificationMessage(error.message));
+  }
 };
 
 export const fetchChannel = channelId => async dispatch => {
@@ -42,13 +52,17 @@ export const fetchChannel = channelId => async dispatch => {
     type: START_FETCH_CHANNEL
   });
 
-  const channel = await vidj.get(channelId);
-  dispatch({
-    type: FETCH_CHANNEL_SUCCESS,
-    payload: channel
-  });
+  try {
+    const channel = await vidj.get(channelId);
+    dispatch({
+      type: FETCH_CHANNEL_SUCCESS,
+      payload: channel
+    });
 
-  dispatch(updatePlaylist(channel.playlist));
+    dispatch(updatePlaylist(channel.playlist));
+  } catch (error) {
+    dispatch(setNotificationMessage(error.message));
+  }
 };
 
 export const playNextVideo = channelId => async dispatch => {

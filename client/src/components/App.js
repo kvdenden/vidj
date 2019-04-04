@@ -5,6 +5,7 @@ import "./App.css";
 
 import history from "../history";
 import { fetchAuthToken, socketAuth } from "../actions";
+import Notification from "./Notification";
 import ShowChannelPage from "./pages/ShowChannelPage";
 import SelectChannelPage from "./pages/SelectChannelPage";
 import { Dimmer, Loader } from "semantic-ui-react";
@@ -17,7 +18,6 @@ const App = ({ authToken, fetchAuthToken, socket, socketAuth }) => {
   }, []);
 
   useEffect(() => {
-    console.log("socket effect", socket, authToken);
     if (socket.connected && authToken) {
       socketAuth(authToken);
     }
@@ -33,6 +33,7 @@ const App = ({ authToken, fetchAuthToken, socket, socketAuth }) => {
 
   return (
     <div className="ui container">
+      <Notification />
       <Router history={history}>
         <Switch>
           <Route path="/" exact component={SelectChannelPage} />

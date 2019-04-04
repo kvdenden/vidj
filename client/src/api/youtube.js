@@ -18,11 +18,7 @@ const parseResult = result => {
 };
 
 export default async query => {
-  try {
-    const response = await youtubeSearch(query, opts);
-    const results = response.results.map(parseResult);
-    return { results };
-  } catch (error) {
-    return { error };
-  }
+  const response = await youtubeSearch(query, opts);
+  const results = response.results.map(parseResult);
+  return { results };
 };
