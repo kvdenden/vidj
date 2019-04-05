@@ -18,7 +18,7 @@ module.exports = {
     return await Channel.findByIdAndUpdate(
       channelId,
       {
-        $push: { playlist: videoId }
+        $push: { playlist: { videoId } }
       },
       { new: true }
     );
@@ -49,6 +49,23 @@ module.exports = {
       channel.playlist = removeAt(channel.playlist, index);
       channel.save();
     }
+    return channel;
+  },
+
+  vote: async (channelId, index, voter, vote) => {
+    // Remove previous vote by user if it exists
+    await Channel.findByIdAndUpdate(channelId, {
+      $pull: { [`playlist.${index}.votes`]: { voter: voter._id } }
+    });
+
+    const channel = await Channel.findByIdAndUpdate(
+      channelId,
+      {
+        $push: { [`playlist.${index}.votes`]: { voter, vote } }
+      },
+      { new: true }
+    );
+
     return channel;
   }
 };

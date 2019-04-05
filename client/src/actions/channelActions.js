@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import {
   START_FETCH_CHANNEL,
   FETCH_CHANNEL_SUCCESS,
@@ -21,12 +23,13 @@ const fetchVideos = async videoIds => {
   return videos;
 };
 
-export const updatePlaylist = videoIds => async dispatch => {
+export const updatePlaylist = playlist => async dispatch => {
   try {
+    const videoIds = playlist.map(video => video.videoId);
     const videos = await fetchVideos(videoIds);
     dispatch({
       type: FETCH_PLAYLIST_SUCCESS,
-      payload: videos
+      payload: _.merge(playlist, videos)
     });
   } catch (error) {
     dispatch(setNotificationMessage(error.message));

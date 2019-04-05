@@ -1,8 +1,36 @@
 const channelService = require("../services/channelService");
 
-const channelData = channel => {
+const channelData = (channel, user) => {
+  console.log(`channelData`, channel, user);
   const { id, playlist } = channel;
-  return { id, playlist };
+  const isOwner = user && user.id == channel.owner;
+  return {
+    id,
+    playlist: playlist.map(video => videoData(video, user)),
+    owner: isOwner
+  };
+};
+
+const videoData = (video, user) => {
+  const { videoId, votes, score } = video;
+  const myVote = (user && votes.find(vote => user.id == vote.voter)) || {
+    vote: null
+  };
+  return { videoId, score, vote: myVote.vote };
+};
+
+const callAndSendChannelData = async (req, res, serviceCall, ...args) => {
+  try {
+    const channel = await serviceCall(...args);
+    if (channel) {
+      const data = channelData(channel, req.user);
+      res.send(data);
+    } else {
+      res.status(404).send();
+    }
+  } catch (err) {
+    res.status(422).send(err);
+  }
 };
 
 module.exports = {
@@ -10,77 +38,88 @@ module.exports = {
     const { id } = req.query;
     const filter = id ? { _id: id } : {};
     const channels = await channelService.find(filter);
-    const data = channels.map(channelData);
+    const data = channels.map(channel => channelData(channel, req.user));
     res.send(data);
   },
 
   show: async (req, res) => {
     const { channelId } = req.params;
-    const channel = await channelService.get(channelId);
-    if (channel) {
-      const data = channelData(channel);
-      const isOwner = req.user && req.user.id == channel.owner;
-      res.send({ ...data, owner: isOwner });
-    } else {
-      res.status(404).send();
-    }
+    callAndSendChannelData(req, res, channelService.get, channelId);
   },
 
   create: async (req, res) => {
-    try {
-      const channel = await channelService.create({ owner: req.user });
-      const data = channelData(channel);
-      res.send(data);
-    } catch (err) {
-      res.status(422).send(err);
-    }
+    callAndSendChannelData(req, res, channelService.create, {
+      owner: req.user
+    });
   },
 
   addVideo: async (req, res) => {
     const { channelId } = req.params;
     const { videoId } = req.body;
-    const channel = await channelService.addVideo(channelId, videoId);
-    if (channel) {
-      const data = channelData(channel);
-      res.send(data);
-    } else {
-      res.status(404).send();
-    }
+    callAndSendChannelData(
+      req,
+      res,
+      channelService.addVideo,
+      channelId,
+      videoId
+    );
   },
 
   nextVideo: async (req, res) => {
     const { channelId } = req.params;
-    const channel = await channelService.nextVideo(channelId);
-    if (channel) {
-      const data = channelData(channel);
-      res.send(data);
-    } else {
-      res.status(404).send();
-    }
+    callAndSendChannelData(req, res, channelService.nextVideo, channelId);
   },
 
   moveVideo: async (req, res) => {
     const { channelId } = req.params;
     const { from, to } = req.body;
-
-    const channel = await channelService.moveVideo(channelId, from, to);
-    if (channel) {
-      res.send(channel);
-    } else {
-      res.status(404).send();
-    }
+    callAndSendChannelData(
+      req,
+      res,
+      channelService.moveVideo,
+      channelId,
+      from,
+      to
+    );
   },
 
   removeVideo: async (req, res) => {
     const { channelId } = req.params;
     const { index } = req.body;
+    callAndSendChannelData(
+      req,
+      res,
+      channelService.removeVideo,
+      channelId,
+      index
+    );
+  },
 
-    const channel = await channelService.removeVideo(channelId, index);
-    if (channel) {
-      const data = channelData(channel);
-      res.send(data);
-    } else {
-      res.status(404).send();
-    }
+  upvote: async (req, res) => {
+    const { channelId } = req.params;
+    const { index } = req.body;
+    callAndSendChannelData(
+      req,
+      res,
+      channelService.vote,
+      channelId,
+      index,
+      req.user,
+      +1
+    );
+  },
+
+  downvote: async (req, res) => {
+    const { channelId } = req.params;
+    const { index } = req.body;
+    callAndSendChannelData(
+      req,
+      res,
+      channelService.vote,
+      channelId,
+      index,
+      req.user,
+      -1
+    );
   }
 };
