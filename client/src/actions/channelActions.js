@@ -7,6 +7,8 @@ import {
   PLAY_NEXT_VIDEO,
   ADD_VIDEO_TO_PLAYLIST,
   CHANGE_VIDEO_POSITION,
+  UPVOTE_VIDEO,
+  DOWNVOTE_VIDEO,
   SET_CHANNEL_MASTER,
   REMOVE_VIDEO_FROM_PLAYLIST
 } from "./types";
@@ -101,6 +103,24 @@ export const removeVideoFromPlaylist = (channelId, index) => async dispatch => {
   });
 
   callAndUpdatePlaylist(dispatch, vidj.removeVideo, channelId, index);
+};
+
+export const upvoteVideo = (channelId, index) => async dispatch => {
+  dispatch({
+    type: UPVOTE_VIDEO,
+    payload: index
+  });
+
+  callAndUpdatePlaylist(dispatch, vidj.upvoteVideo, channelId, index);
+};
+
+export const downvoteVideo = (channelId, index) => async dispatch => {
+  dispatch({
+    type: DOWNVOTE_VIDEO,
+    payload: index
+  });
+
+  callAndUpdatePlaylist(dispatch, vidj.downvoteVideo, channelId, index);
 };
 
 export const setChannelMaster = (master = true) => {

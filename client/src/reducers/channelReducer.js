@@ -6,7 +6,9 @@ import {
   PLAY_NEXT_VIDEO,
   ADD_VIDEO_TO_PLAYLIST,
   CHANGE_VIDEO_POSITION,
-  REMOVE_VIDEO_FROM_PLAYLIST
+  REMOVE_VIDEO_FROM_PLAYLIST,
+  UPVOTE_VIDEO,
+  DOWNVOTE_VIDEO
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -28,27 +30,49 @@ const removeAt = (array, index) => {
   return array;
 };
 
+const changeVoteAt = (array, index, value) => {
+  array = [...array];
+  array[index].vote = value;
+  return array;
+};
+
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case START_FETCH_CHANNEL:
-      return { ...INITIAL_STATE, loading: true };
-    case FETCH_CHANNEL_SUCCESS:
+    case START_FETCH_CHANNEL: {
+      return { ...state, loading: true };
+    }
+    case FETCH_CHANNEL_SUCCESS: {
       const { owner } = action.payload;
       return { ...state, loading: false, owner };
-    case SET_CHANNEL_MASTER:
+    }
+    case SET_CHANNEL_MASTER: {
       return { ...state, master: action.payload };
-    case FETCH_PLAYLIST_SUCCESS:
+    }
+    case FETCH_PLAYLIST_SUCCESS: {
       return { ...state, playlist: action.payload };
-    case PLAY_NEXT_VIDEO:
+    }
+    case PLAY_NEXT_VIDEO: {
       return { ...state, playlist: state.playlist.slice(1) };
-    case ADD_VIDEO_TO_PLAYLIST:
+    }
+    case ADD_VIDEO_TO_PLAYLIST: {
       return { ...state, playlist: [...state.playlist, action.payload] };
-    case CHANGE_VIDEO_POSITION:
+    }
+    case CHANGE_VIDEO_POSITION: {
       const { from, to } = action.payload;
       return { ...state, playlist: moveArray(state.playlist, from, to) };
-    case REMOVE_VIDEO_FROM_PLAYLIST:
+    }
+    case REMOVE_VIDEO_FROM_PLAYLIST: {
       const position = action.payload;
       return { ...state, playlist: removeAt(state.playlist, position) };
+    }
+    case UPVOTE_VIDEO: {
+      const position = action.payload;
+      return { ...state, playlist: changeVoteAt(state.playlist, position, +1) };
+    }
+    case DOWNVOTE_VIDEO: {
+      const position = action.payload;
+      return { ...state, playlist: changeVoteAt(state.playlist, position, -1) };
+    }
     default:
       return state;
   }

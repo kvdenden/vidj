@@ -1,40 +1,51 @@
 import React from "react";
-import { List, Image, Button } from "semantic-ui-react";
+import { List, Image, Button, Label } from "semantic-ui-react";
 
 import "./Playlist.css";
 
-const PlaylistAction = ({ title, action, ...buttonProps }) => {
-  return (
-    <Button onClick={action} {...buttonProps}>
-      {title}
-    </Button>
-  );
+const PlaylistItemAction = ({ action, ...buttonProps }) => {
+  return <Button onClick={action} {...buttonProps} />;
 };
 
-const PlaylistActions = ({ video, videoIndex, actions }) => {
+const PlaylistItemActions = ({ video, videoIndex, actions }) => {
   const buttons = actions.map((action, index) => {
     const actionProps = {
       ...action,
       action: () => action.action(video, videoIndex)
     };
-    return <PlaylistAction key={index} {...actionProps} />;
+    return <PlaylistItemAction key={index} {...actionProps} />;
   });
   return <Button.Group>{buttons}</Button.Group>;
 };
 
+const ScoreLabel = ({ score }) => {
+  let color;
+  if (score > 0) {
+    color = "green";
+  } else if (score < 0) {
+    color = "red";
+  }
+  return <Label color={color}>{score > 0 ? `+${score}` : score}</Label>;
+};
+
 export const PlaylistItem = ({ index, video, itemActions }) => {
-  const { title, thumbnail } = video;
+  const { title, thumbnail, score } = video;
   return (
     <List.Item style={{ display: "flex", alignItems: "center" }}>
       <Image avatar src={thumbnail} />
       <List.Content style={{ flexGrow: 1 }}>
-        <List.Header>{title}</List.Header>
+        <List.Header>
+          <span className="right floated">
+            <ScoreLabel score={score} />
+          </span>
+          <span style={{ marginRight: "10px" }}>{title}</span>
+        </List.Header>
       </List.Content>
-      <List.Content>
-        <PlaylistActions
+      <List.Content style={{ marginLeft: "10px" }}>
+        <PlaylistItemActions
           video={video}
           videoIndex={index}
-          actions={itemActions}
+          actions={itemActions(video)}
         />
       </List.Content>
     </List.Item>
@@ -68,7 +79,7 @@ const Playlist = ({ videos, itemActions }) => {
 
 Playlist.defaultProps = {
   videos: [],
-  itemActions: []
+  itemActions: () => []
 };
 
 export default Playlist;

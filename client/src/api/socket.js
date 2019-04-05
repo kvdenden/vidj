@@ -3,9 +3,9 @@ import store from "../store";
 import {
   socketConnect,
   socketDisconnect,
-  updatePlaylist,
   setChannelMaster,
-  setVideoStatus
+  setVideoStatus,
+  fetchChannel
 } from "../actions";
 
 const socket = io("http://localhost:8080");
@@ -18,8 +18,8 @@ socket.on("disconnect", () => {
   store.dispatch(socketDisconnect());
 });
 
-socket.on("playlistChange", (_channelId, playlist) => {
-  store.dispatch(updatePlaylist(playlist));
+socket.on("playlistChange", channelId => {
+  store.dispatch(fetchChannel(channelId));
 });
 
 socket.on("setMaster", (_channelId, master) => {

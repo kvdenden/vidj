@@ -11,21 +11,58 @@ const NextVideos = props => {
       playlist: [, ...nextVideos]
     },
     changeVideoPosition,
-    removeVideoFromPlaylist
+    removeVideoFromPlaylist,
+    upvoteVideo,
+    downvoteVideo
   } = props;
 
   if (nextVideos.length < 1) {
     return null;
   }
 
-  const adminActions = [
-    {
-      title: "Remove",
-      color: "red",
-      basic: true,
-      action: (_video, index) => removeVideoFromPlaylist(index + 1)
+  const upvoteAction = active => {
+    if (active) {
+      return {
+        icon: "thumbs up",
+        color: "green",
+        action: () => {}
+      };
+    } else {
+      return {
+        icon: "thumbs up outline",
+        action: (_video, index) => upvoteVideo(index + 1)
+      };
     }
-  ];
+  };
+
+  const downvoteAction = active => {
+    if (active) {
+      return {
+        icon: "thumbs down",
+        color: "red",
+        action: () => {}
+      };
+    } else {
+      return {
+        icon: "thumbs down outline",
+        action: (_video, index) => downvoteVideo(index + 1)
+      };
+    }
+  };
+
+  const removeAction = {
+    icon: "remove",
+    color: "red",
+    basic: true,
+    action: (_video, index) => removeVideoFromPlaylist(index + 1)
+  };
+
+  const itemActions = video => {
+    const { vote } = video;
+    const userActions = [upvoteAction(vote === 1), downvoteAction(vote === -1)];
+    const adminActions = [removeAction];
+    return owner ? [...userActions, ...adminActions] : userActions;
+  };
 
   const playlist = owner ? (
     <SortablePlaylist
@@ -33,10 +70,10 @@ const NextVideos = props => {
       onChangePosition={(oldIndex, newIndex) =>
         changeVideoPosition(oldIndex + 1, newIndex + 1)
       }
-      itemActions={adminActions}
+      itemActions={itemActions}
     />
   ) : (
-    <Playlist videos={nextVideos} />
+    <Playlist videos={nextVideos} itemActions={itemActions} />
   );
 
   return (

@@ -11,14 +11,13 @@ const serviceMethods = [
 module.exports = io => {
   const broadcastPlaylistChange = channel => {
     const channelId = channel.id;
-    io.to(channelId).emit("playlistChange", channelId, channel.playlist);
+    io.to(channelId).emit("playlistChange", channelId);
   };
 
   serviceMethods.forEach(method => {
     const originalMethod = channelService[method];
     const wrappedMethod = async (...args) => {
       const result = await originalMethod(...args);
-      console.log(`broadcasting channel update: ${method}`);
       broadcastPlaylistChange(result);
       return result;
     };

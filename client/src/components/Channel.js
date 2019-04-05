@@ -11,7 +11,9 @@ import {
   playNextVideo,
   addVideoToPlaylist,
   changeVideoPosition,
-  removeVideoFromPlaylist
+  removeVideoFromPlaylist,
+  upvoteVideo,
+  downvoteVideo
 } from "../actions";
 
 import CurrentVideo from "./CurrentVideo";
@@ -66,7 +68,9 @@ const mapDispatchToProps = (dispatch, { channelId }) => {
       playNextVideo,
       addVideoToPlaylist,
       changeVideoPosition,
-      removeVideoFromPlaylist
+      removeVideoFromPlaylist,
+      upvoteVideo,
+      downvoteVideo
     },
     action => _.partial(action, channelId)
   );

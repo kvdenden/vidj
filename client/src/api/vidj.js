@@ -47,3 +47,13 @@ export const removeVideo = async (channelId, index) => {
   const response = await api.post(`/channels/${channelId}/remove`, { index });
   return response.data;
 };
+
+export const upvoteVideo = async (channelId, index) => {
+  const response = await api.post(`/channels/${channelId}/upvote`, { index });
+  return response.data;
+};
+
+export const downvoteVideo = async (channelId, index) => {
+  const response = await api.post(`/channels/${channelId}/downvote`, { index });
+  return response.data;
+};

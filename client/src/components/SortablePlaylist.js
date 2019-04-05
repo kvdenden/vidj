@@ -40,6 +40,7 @@ const SortablePlaylist = ({ videos, itemActions, onChangePosition }) => {
           onChangePosition(oldIndex, newIndex)
         }
         useWindowAsScrollContainer
+        pressDelay={200}
       />
       <div
         ref={helperRef}
