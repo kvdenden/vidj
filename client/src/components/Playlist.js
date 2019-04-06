@@ -34,11 +34,11 @@ export const PlaylistItem = ({ index, video, itemActions }) => {
     <List.Item style={{ display: "flex", alignItems: "center" }}>
       <Image avatar src={thumbnail} />
       <List.Content style={{ flexGrow: 1 }}>
-        <List.Header>
-          <span className="right floated">
+        <List.Header style={{ display: "flex", alignItems: "center" }}>
+          <span style={{ marginRight: "10px" }}>{title}</span>
+          <span style={{ marginLeft: "auto" }}>
             <ScoreLabel score={score} />
           </span>
-          <span style={{ marginRight: "10px" }}>{title}</span>
         </List.Header>
       </List.Content>
       <List.Content style={{ marginLeft: "10px" }}>
