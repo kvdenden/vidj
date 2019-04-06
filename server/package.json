@@ -4,13 +4,15 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "start": "node src/index.js",
+    "dev": "nodemon --exec 'node -r dotenv/config' src/index.js"
   },
   "author": "Ken Van den Enden",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
+    "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "express-bearer-token": "^2.2.0",
     "helmet": "^3.16.0",

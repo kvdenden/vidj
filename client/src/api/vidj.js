@@ -1,6 +1,7 @@
 import axios from "axios";
+import { VIDJ_SERVER_URL } from "../config";
 
-const api = axios.create({ baseURL: "http://localhost:8080" });
+const api = axios.create({ baseURL: VIDJ_SERVER_URL });
 
 api.interceptors.request.use(config => {
   const token = localStorage.getItem("token");

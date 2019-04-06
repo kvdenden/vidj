@@ -4,15 +4,17 @@ const cors = require("cors");
 const morgan = require("morgan");
 const bearerToken = require("express-bearer-token");
 
+const { API_PATH, PORT, MONGODB_URI, MONGODB_DBNAME } = require("./config");
+
 const authMiddleware = require("./middleware/auth");
 
-const authRoutes = require("./routes/auth");
-const channelRoutes = require("./routes/channels");
+const routes = require("./routes");
 
 mongoose.Promise = global.Promise;
 
 if (process.env.NODE_ENV !== "test") {
-  mongoose.connect("mongodb://localhost/vidj", {
+  mongoose.connect(MONGODB_URI, {
+    dbName: MONGODB_DBNAME,
     useNewUrlParser: true,
     useFindAndModify: false,
     useCreateIndex: true
@@ -27,9 +29,10 @@ app.use(bearerToken());
 
 app.use(authMiddleware);
 
-app.use("/auth", authRoutes);
-app.use("/channels", channelRoutes);
+app.use(API_PATH, routes);
 
-const server = app.listen(8080);
+const server = app.listen(PORT, () => {
+  console.log(`server listening on port ${PORT}`);
+});
 
 module.exports = server;

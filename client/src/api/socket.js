@@ -1,4 +1,5 @@
 import io from "socket.io-client";
+import { VIDJ_SOCKET_URL } from "../config";
 import store from "../store";
 import {
   socketConnect,
@@ -8,7 +9,7 @@ import {
   fetchChannel
 } from "../actions";
 
-const socket = io("http://localhost:8080");
+const socket = io(VIDJ_SOCKET_URL);
 
 socket.on("connect", () => {
   store.dispatch(socketConnect());
