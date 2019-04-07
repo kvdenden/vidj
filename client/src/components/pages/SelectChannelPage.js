@@ -1,11 +1,15 @@
-import React from "react";
-import { Segment, Divider, Header, Icon } from "semantic-ui-react";
+import React, { useEffect } from "react";
+import { Segment, Divider, Header } from "semantic-ui-react";
 import JoinChannelForm from "../JoinChannelForm";
 import CreateChannelForm from "../CreateChannelForm";
 
 const SelectChannelPage = () => {
+  useEffect(() => {
+    document.title = "VIDJ - Select your Channel";
+  }, []);
+
   return (
-    <div>
+    <div style={{ textAlign: "center" }}>
       <Header as="h1">
         <Header.Content>
           VIDJ
@@ -14,7 +18,7 @@ const SelectChannelPage = () => {
           </Header.Subheader>
         </Header.Content>
       </Header>
-      <Segment textAlign="center">
+      <Segment>
         <JoinChannelForm />
         <Divider horizontal section>
           Or

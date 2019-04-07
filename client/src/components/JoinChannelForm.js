@@ -24,7 +24,7 @@ const JoinChannelForm = ({ setNotificationMessage }) => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Header>Enter Channel ID</Header>
+      <Header>Join Channel</Header>
       <Form.Input
         required
         inline

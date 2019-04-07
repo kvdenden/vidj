@@ -29,6 +29,7 @@ const ChannelSchema = new mongoose.Schema({
     type: String,
     default: shortid.generate
   },
+  title: String,
   playlist: [VideoSchema],
   owner: {
     type: mongoose.Schema.Types.ObjectId,

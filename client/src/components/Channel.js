@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { Divider } from "semantic-ui-react";
+import { Divider, Header } from "semantic-ui-react";
 import _ from "lodash";
 import history from "../history";
 
@@ -27,6 +27,7 @@ import VideoSearch from "./VideoSearch";
 const Channel = props => {
   const {
     channelId,
+    channel: { title },
     fetchChannel,
     addVideoToPlaylist,
     socketReady,
@@ -60,6 +61,7 @@ const Channel = props => {
 
   return (
     <div>
+      {title ? <Header as="h1">{title}</Header> : ""}
       <CurrentVideo {...props} />
       <Divider />
       <VideoSearch onVideoSelect={addVideoToPlaylist} />

@@ -14,8 +14,8 @@ export const auth = async () => {
   return response.data;
 };
 
-export const create = async () => {
-  const response = await api.post("/channels");
+export const create = async channelProps => {
+  const response = await api.post("/channels", channelProps);
   return response.data;
 };
 

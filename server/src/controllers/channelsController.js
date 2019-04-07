@@ -30,7 +30,9 @@ module.exports = {
   },
 
   create: async (req, res) => {
+    const { title } = req.body;
     callAndSendChannel(req, res, channelService.create, {
+      title,
       owner: req.user
     });
   },

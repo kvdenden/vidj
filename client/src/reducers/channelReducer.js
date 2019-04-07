@@ -13,6 +13,8 @@ import {
 
 const INITIAL_STATE = {
   loading: false,
+  id: undefined,
+  title: "",
   owner: false,
   master: false,
   playlist: []
@@ -42,8 +44,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: true };
     }
     case FETCH_CHANNEL_SUCCESS: {
-      const { owner } = action.payload;
-      return { ...state, loading: false, owner };
+      const { id, title, owner } = action.payload;
+      return { ...state, loading: false, id, title, owner };
     }
     case SET_CHANNEL_MASTER: {
       return { ...state, master: action.payload };
