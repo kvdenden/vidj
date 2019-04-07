@@ -6,7 +6,7 @@ import { create } from "../api/vidj";
 const CreateChannelForm = () => {
   const handleSubmit = async () => {
     const newChannel = await create();
-    history.push(`/channels/${newChannel.id}`);
+    history.push(`/${newChannel.id}`);
   };
 
   return (

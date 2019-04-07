@@ -12,7 +12,7 @@ const JoinChannelForm = ({ setNotificationMessage }) => {
   const handleSubmit = async () => {
     const channelExists = await check(channelId);
     if (channelExists) {
-      history.push(`/channels/${channelId}`);
+      history.push(`/${channelId}`);
     } else {
       setNotificationMessage(
         `Channel ${channelId} does not exist!`,

@@ -9,6 +9,7 @@ import Notification from "./Notification";
 import ShowChannelPage from "./pages/ShowChannelPage";
 import SelectChannelPage from "./pages/SelectChannelPage";
 import { Dimmer, Loader } from "semantic-ui-react";
+import PageNotFound from "./pages/PageNotFound";
 
 const App = ({ authToken, fetchAuthToken, socket, socketAuth }) => {
   useEffect(() => {
@@ -32,12 +33,13 @@ const App = ({ authToken, fetchAuthToken, socket, socketAuth }) => {
   }
 
   return (
-    <div className="ui container">
+    <div className="ui container" style={{ marginTop: "1em" }}>
       <Notification />
       <Router history={history}>
         <Switch>
           <Route path="/" exact component={SelectChannelPage} />
-          <Route path="/channels/:channelId" component={ShowChannelPage} />
+          <Route path="/:channelId" exact component={ShowChannelPage} />
+          <Route component={PageNotFound} />
         </Switch>
       </Router>
     </div>

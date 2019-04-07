@@ -3,6 +3,9 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Divider } from "semantic-ui-react";
 import _ from "lodash";
+import history from "../history";
+
+import { check } from "../api/vidj";
 
 import {
   subscribeToChannel,
@@ -13,7 +16,8 @@ import {
   changeVideoPosition,
   removeVideoFromPlaylist,
   upvoteVideo,
-  downvoteVideo
+  downvoteVideo,
+  setNotificationMessage
 } from "../actions";
 
 import CurrentVideo from "./CurrentVideo";
@@ -27,11 +31,23 @@ const Channel = props => {
     addVideoToPlaylist,
     socketReady,
     subscribeToChannel,
-    unsubscribeFromChannel
+    unsubscribeFromChannel,
+    setNotificationMessage
   } = props;
 
   useEffect(() => {
-    fetchChannel();
+    check(channelId).then(isValid => {
+      if (isValid) {
+        fetchChannel();
+      } else {
+        history.push(`/`);
+        setNotificationMessage(
+          `Channel ${channelId} does not exist!`,
+          "Invalid Channel ID",
+          "warning"
+        );
+      }
+    });
   }, [channelId]);
 
   useEffect(() => {
@@ -43,7 +59,7 @@ const Channel = props => {
   }, [channelId, socketReady]);
 
   return (
-    <div style={{ marginTop: "2em" }}>
+    <div>
       <CurrentVideo {...props} />
       <Divider />
       <VideoSearch onVideoSelect={addVideoToPlaylist} />
@@ -74,7 +90,15 @@ const mapDispatchToProps = (dispatch, { channelId }) => {
     },
     action => _.partial(action, channelId)
   );
-  return bindActionCreators(channelActions, dispatch);
+  const otherActions = { setNotificationMessage };
+
+  return bindActionCreators(
+    {
+      ...channelActions,
+      ...otherActions
+    },
+    dispatch
+  );
 };
 
 export default connect(

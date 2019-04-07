@@ -67,9 +67,11 @@ const NextVideos = props => {
   const playlist = owner ? (
     <SortablePlaylist
       videos={nextVideos}
-      onChangePosition={(oldIndex, newIndex) =>
-        changeVideoPosition(oldIndex + 1, newIndex + 1)
-      }
+      onChangePosition={(oldIndex, newIndex) => {
+        if (oldIndex !== newIndex) {
+          changeVideoPosition(oldIndex + 1, newIndex + 1);
+        }
+      }}
       itemActions={itemActions}
     />
   ) : (
