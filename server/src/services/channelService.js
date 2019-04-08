@@ -14,6 +14,10 @@ module.exports = {
     return await new Channel(props).save();
   },
 
+  delete: async channelId => {
+    return await Channel.findByIdAndDelete(channelId);
+  },
+
   addVideo: async (channelId, videoId) => {
     return await Channel.findByIdAndUpdate(
       channelId,

@@ -32,7 +32,11 @@ const syncMaster = socket => {
 
   socket.on("joinChannel", async channelId => {
     const channel = await Channel.findById(channelId);
-    if (socketUser.id == channel.owner && !currentMaster(channelId)) {
+    if (
+      channel &&
+      socketUser.id == channel.owner &&
+      !currentMaster(channelId)
+    ) {
       setMaster(channelId, socket);
     }
   });

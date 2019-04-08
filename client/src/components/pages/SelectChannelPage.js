@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Segment, Divider, Header } from "semantic-ui-react";
 import JoinChannelForm from "../JoinChannelForm";
 import CreateChannelForm from "../CreateChannelForm";
+import MyChannels from "../MyChannels";
 
 const SelectChannelPage = () => {
   useEffect(() => {
@@ -9,8 +10,8 @@ const SelectChannelPage = () => {
   }, []);
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <Header as="h1">
+    <div>
+      <Header as="h1" style={{ textAlign: "center" }}>
         <Header.Content>
           VIDJ
           <Header.Subheader>
@@ -18,7 +19,8 @@ const SelectChannelPage = () => {
           </Header.Subheader>
         </Header.Content>
       </Header>
-      <Segment>
+      <MyChannels />
+      <Segment style={{ textAlign: "center" }}>
         <JoinChannelForm />
         <Divider horizontal section>
           Or

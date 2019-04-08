@@ -14,8 +14,10 @@ const onlyChannelOwner = (req, res, next) => {
   });
 };
 
-router.get("/", channelsController.index);
+router.get("/", onlyAuthorized, channelsController.index);
+router.get("/check", channelsController.check);
 router.get("/:channelId", channelsController.show);
+router.delete("/:channelId", onlyChannelOwner, channelsController.delete);
 
 router.post("/", onlyAuthorized, channelsController.create);
 router.post("/:channelId/add", onlyAuthorized, channelsController.addVideo);

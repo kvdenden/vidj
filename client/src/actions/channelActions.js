@@ -10,7 +10,9 @@ import {
   UPVOTE_VIDEO,
   DOWNVOTE_VIDEO,
   SET_CHANNEL_MASTER,
-  REMOVE_VIDEO_FROM_PLAYLIST
+  REMOVE_VIDEO_FROM_PLAYLIST,
+  FETCH_MY_CHANNELS_SUCCESS,
+  DELETE_CHANNEL_SUCCESS
 } from "./types";
 
 import { memoized as invidious } from "../api/invidious";
@@ -47,6 +49,30 @@ const callAndUpdatePlaylist = async (
   try {
     const { playlist } = await apiCall(channelId, ...extraArgs);
     dispatch(updatePlaylist(playlist));
+  } catch (error) {
+    dispatch(setNotificationMessage(error.message));
+  }
+};
+
+export const fetchMyChannels = () => async dispatch => {
+  try {
+    const channels = await vidj.index();
+    dispatch({
+      type: FETCH_MY_CHANNELS_SUCCESS,
+      payload: channels
+    });
+  } catch (error) {
+    dispatch(setNotificationMessage(error.message));
+  }
+};
+
+export const deleteChannel = channelId => async dispatch => {
+  try {
+    await vidj.deleteChannel(channelId);
+    dispatch({
+      type: DELETE_CHANNEL_SUCCESS,
+      payload: channelId
+    });
   } catch (error) {
     dispatch(setNotificationMessage(error.message));
   }

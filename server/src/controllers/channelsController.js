@@ -17,11 +17,16 @@ const callAndSendChannel = async (req, res, serviceCall, ...args) => {
 
 module.exports = {
   index: async (req, res) => {
-    const { id } = req.query;
-    const filter = id ? { _id: id } : {};
-    const channels = await channelService.find(filter);
+    const channels = await channelService.find({ owner: req.user });
     const data = channels.map(channel => channelPresenter(channel, req.user));
     res.send(data);
+  },
+
+  check: async (req, res) => {
+    const { id } = req.query;
+    const channels = await channelService.find({ _id: id });
+    console.log(channels);
+    res.send(channels.length > 0);
   },
 
   show: async (req, res) => {
@@ -35,6 +40,12 @@ module.exports = {
       title,
       owner: req.user
     });
+  },
+
+  delete: async (req, res) => {
+    const { channelId } = req.params;
+    channelService.delete(channelId);
+    res.status(204).send();
   },
 
   addVideo: async (req, res) => {

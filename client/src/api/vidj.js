@@ -14,14 +14,23 @@ export const auth = async () => {
   return response.data;
 };
 
+export const index = async () => {
+  const response = await api.get(`/channels`);
+  return response.data;
+};
+
 export const create = async channelProps => {
   const response = await api.post("/channels", channelProps);
   return response.data;
 };
 
+export const deleteChannel = async channelId => {
+  await api.delete(`/channels/${channelId}`);
+};
+
 export const check = async channelId => {
-  const response = await api.get(`/channels?id=${channelId}`);
-  return response.data.length > 0;
+  const response = await api.get(`/channels/check?id=${channelId}`);
+  return response.data;
 };
 
 export const get = async channelId => {
